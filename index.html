@@ -6,29 +6,33 @@
   <title>Pompologie — Devises des Shadoks</title>
   <meta name="description" content="Les grandes vérités de la pompologie Shadok, tirées au sort. Plus ça rate, plus on a de chances que ça marche.">
   
+  <!-- Open Graph -->
   <meta property="og:title" content="Pompologie — Devises des Shadoks">
   <meta property="og:description" content="Découvrez la sagesse absurde des Shadoks, une devise à la fois.">
   <meta property="og:type" content="website">
   
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Pompologie — Devises des Shadoks">
   
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
+  <!-- Favicon inline SVG -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐦</text></svg>">
 
   <style>
-    /* Design System & Variables */
+    /* Design System */
     :root {
-      --color-bg: #0A0A0A;
-      --color-surface: #141414;
-      --color-accent: #F5C800;
-      --color-danger: #E84B3A;
-      --color-text: #F0EFE7;
-      --color-muted: #6B6B6B;
-      --color-border: #2A2A2A;
+      --color-bg:        #0A0A0A;   /* noir profond — fond principal */
+      --color-surface:   #141414;   /* gris très sombre — cards / zones */
+      --color-accent:    #F5C800;   /* jaune Shadok — CTA, highlights */
+      --color-danger:    #E84B3A;   /* rouge alerte — erreurs, easter egg */
+      --color-text:      #F0EFE7;   /* blanc cassé — texte principal */
+      --color-muted:     #6B6B6B;   /* gris moyen — attributions, secondaire */
+      --color-border:    #2A2A2A;   /* gris anthracite — séparateurs */
     }
 
     /* Reset et base */
@@ -39,47 +43,66 @@
       color: var(--color-text);
       min-height: 100dvh;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      overflow: hidden;
-      font-family: 'Space Grotesk', sans-serif;
+      /* Pas d'overflow:hidden — certaines devises longues nécessitent un scroll */
+      font-family: 'Space Mono', monospace;
     }
 
-    /* Canvas Grain Overlay */
+    /* Grain Overlay */
     #grain-overlay {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
       z-index: 1000;
+      opacity: 0.04;
     }
 
+    /* Layout Principal */
     #app {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
+      align-items: flex-start;
+      justify-content: flex-start;
       min-height: 100dvh;
       width: min(900px, 90vw);
-      padding: clamp(2rem, 5vh, 4rem) 0;
+      padding: clamp(2rem, 5vh, 4rem) 0 clamp(4rem, 8vh, 6rem) 0;
       gap: 2rem;
       position: relative;
-      z-index: 10;
+      z-index: 1;
     }
 
     header {
       width: 100%;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+      padding-bottom: clamp(1rem, 3vh, 2rem);
+      border-bottom: 1px solid var(--color-border);
     }
 
-    .site-label {
-      color: var(--color-accent);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
+    h1.site-title {
+      font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      font-size: clamp(2.8rem, 8vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
       text-transform: uppercase;
+      color: var(--color-accent);
+      -webkit-text-stroke: 1px var(--color-accent);
+    }
+
+    p.site-tagline {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-muted);
     }
 
     main#devise-container {
@@ -110,10 +133,11 @@
       position: relative;
       padding-left: 1.5rem;
       border-left: 4px solid var(--color-accent);
-      min-height: 8rem; 
-      will-change: transform, opacity;
+      min-height: 8rem; /* évite le layout shift */
+      margin: 0;
     }
 
+    /* Curseur clignotant pendant l'écriture */
     blockquote#devise-text.typing::after {
       content: '|';
       color: var(--color-accent);
@@ -126,11 +150,9 @@
 
     #attribution {
       font-family: 'Space Mono', monospace;
-      font-weight: 400;
-      font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+      font-size: 0.8rem;
       color: var(--color-muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      letter-spacing: 0.06em;
       opacity: 0;
       transform: translateY(8px);
       transition: opacity 0.4s ease, transform 0.4s ease;
@@ -149,7 +171,7 @@
       gap: 1.5rem;
     }
 
-    /* Bouton principal */
+    /* Bouton Principal */
     #pomper-btn {
       position: relative;
       display: flex;
@@ -166,28 +188,30 @@
       text-transform: uppercase;
       cursor: pointer;
       clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
-      transition: transform 0.15s ease, background 0.15s ease, opacity 0.2s ease;
+      transition: transform 0.15s ease, background 0.15s ease;
       overflow: hidden;
     }
 
-    #pomper-btn:hover:not(:disabled) {
+    #pomper-btn:hover {
       background: #FFD700;
       transform: translateY(-2px);
     }
 
-    #pomper-btn:active:not(:disabled) {
+    #pomper-btn:active {
       transform: translateY(1px) scale(0.98);
     }
 
     #pomper-btn:disabled {
       cursor: not-allowed;
-      opacity: 0.7;
+      opacity: 0.8;
     }
 
+    /* Icône pompe inline SVG dans le bouton */
     #pomper-btn .pump-icon {
       width: 20px;
       height: 20px;
       flex-shrink: 0;
+      fill: currentColor;
     }
 
     #pomper-btn.pumping .pump-icon {
@@ -214,7 +238,6 @@
       color: var(--color-muted);
       padding: 0.5rem 1rem;
       font-family: 'Space Mono', monospace;
-      font-weight: 700;
       font-size: 0.75rem;
       letter-spacing: 0.1em;
       cursor: pointer;
@@ -232,7 +255,7 @@
       color: #4CAF50;
     }
 
-    /* Shadok SVG */
+    /* Shadok Mascotte */
     #shadok-mascot {
       position: fixed;
       bottom: -5px;
@@ -265,21 +288,21 @@
       animation: jump 0.5s ease-in-out;
     }
 
-    /* Accessibilité */
+    /* Accessibilité & Préférences */
     @media (prefers-reduced-motion: reduce) {
-      #shadok-mascot { animation: none !important; }
-      blockquote#devise-text { transition: opacity 0.1s !important; }
+      #shadok-mascot { animation: none; }
+      blockquote#devise-text { transition: opacity 0.1s; }
       * { animation-duration: 0.01ms !important; }
     }
   </style>
 </head>
 <body>
-
   <canvas id="grain-overlay"></canvas>
 
   <div id="app">
     <header>
-      <p class="site-label">La Pompologie Quotidienne</p>
+      <h1 class="site-title">POMPOLOGIE</h1>
+      <p class="site-tagline">— Devises des Shadoks</p>
     </header>
 
     <main id="devise-container">
@@ -290,11 +313,13 @@
 
     <footer>
       <button id="pomper-btn" aria-label="Afficher une nouvelle devise Shadok">
-        Pomper encore
-        <svg class="pump-icon" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 22h12M9 22V10M15 22V10M9 10h6M12 10V2M8 2h8"/>
+        <svg class="pump-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 18h16v2H4zM11 4h2v10h-2zM9 14h6v2H9z" />
+            <path d="M7 14h2v-4H7zm8 0h2v-4h-2z" opacity=".5"/>
         </svg>
+        Pomper encore
       </button>
+
       <div class="share-zone">
         <button id="copy-btn" class="share-btn-small">Copier</button>
         <button id="share-btn" class="share-btn-small">Partager</button>
@@ -304,61 +329,202 @@
 
   <div id="shadok-mascot" title="Cliquez pour pomper !">
     <svg viewBox="0 0 80 90" width="80" height="90" xmlns="http://www.w3.org/2000/svg">
+      <!-- Corps -->
       <ellipse cx="40" cy="42" rx="30" ry="26" fill="#0A0A0A" stroke="#F5C800" stroke-width="3"/>
+      <!-- Oeil gauche -->
       <circle cx="28" cy="38" r="6" fill="white"/>
       <circle cx="29" cy="38" r="3" fill="#0A0A0A"/>
+      <!-- Oeil droit -->
       <circle cx="50" cy="36" r="8" fill="white"/>
       <circle cx="51" cy="36" r="4" fill="#0A0A0A"/>
+      <!-- Bec -->
       <polygon points="10,42 24,38 24,46" fill="#F5C800"/>
+      <!-- Patte gauche -->
       <line x1="24" y1="66" x2="16" y2="82" stroke="#F5C800" stroke-width="3" stroke-linecap="round"/>
       <line x1="16" y1="82" x2="10" y2="82" stroke="#F5C800" stroke-width="3" stroke-linecap="round"/>
+      <!-- Patte droite -->
       <line x1="56" y1="66" x2="64" y2="82" stroke="#F5C800" stroke-width="3" stroke-linecap="round"/>
       <line x1="64" y1="82" x2="70" y2="82" stroke="#F5C800" stroke-width="3" stroke-linecap="round"/>
+      <!-- Crête -->
       <polyline points="32,16 36,8 40,16 44,10 48,18" fill="none" stroke="#E84B3A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
 
   <script>
     const DEVISES = [
-      { id: "S01", text: "Plus ça rate, plus on a de chance que ça marche.", season: "Générique", author: null, tags: ["pompologie", "optimisme"] },
-      { id: "S02", text: "Pourquoi faire simple quand on peut faire compliqué.", season: "Générique", author: null, tags: ["complexité", "inefficacité"] },
-      { id: "S03", text: "Un Shadok mort est un Shadok qui ne pompe pas.", season: "Générique", author: "Le Devin plombier", tags: ["pompe", "existence"] },
-      { id: "S04", text: "La ligne droite est le plus long chemin d'un point à un autre.", season: "Générique", author: null, tags: ["logique", "absurde"] },
-      { id: "S05", text: "Il faut pomper pour vivre, et donc vivre pour pomper.", season: "Générique", author: null, tags: ["pompe", "existence", "tautologie"] },
-      { id: "S06", text: "Principe en pompologie : Il vaut mieux pomper d'arrache-pied même s'il ne se passe rien que de risquer qu'il ne se passe quelque chose de pire en ne pompant pas.", season: "Générique", author: null, tags: ["pompologie", "principe", "risque"] },
-      { id: "S07", text: "Pour faire le moins de mécontents possibles, il faut toujours taper sur les mêmes.", season: "Générique", author: "Le Marin Shadok", tags: ["politique", "management absurde"] },
-      { id: "S08", text: "Dans la marine, on ne fait pas grand-chose, mais on le fait de bonne heure.", season: "Saison 1", author: "Le Marin Shadok", tags: ["marine", "productivité"] },
-      { id: "S09", text: "Ce n'est qu'en essayant continuellement que l'on finit par réussir.", season: "Saison 1", author: null, tags: ["persévérance", "pompologie"] },
-      { id: "S10", text: "Quand on ne sait pas où l'on va, il faut aller vite, et le plus vite possible.", season: "Saison 2", author: "Le Marin Shadok", tags: ["navigation", "urgence", "absurde"] },
-      { id: "S11", text: "Chacun sait que c'est sur rien du tout qu'on bâtit les empires les plus solides.", season: "Saison 3", author: null, tags: ["empire", "fondations", "absurde"] },
-      { id: "S12", text: "La culture c'est ce qu'il reste quand on a tout oublié.", season: "Saison 3", author: null, tags: ["culture", "mémoire"] },
-      { id: "S13", text: "Principe d'incertitude : s'il y a une chose où on était sûr, c'est que c'était faux.", season: "Saison 3", author: null, tags: ["incertitude", "épistémologie"] },
-      { id: "S14", text: "Pour guérir quelque chose qui ne marche pas ou qui fait trop de bruit, il faut et il suffit de taper dessus avec quelque chose qui marche mieux ou qui fait plus de bruit.", season: "Saison 3", author: "Le Grand Intelligentieur", tags: ["réparation", "technique", "absurde"] },
-      { id: "S15", text: "La plus grave maladie du cerveau, c'est de réfléchir.", season: "Saison 3", author: "Le Grand Intelligentieur", tags: ["intelligence", "pensée", "paradoxe"] },
-      { id: "S16", text: "La machine ce n'est pas un vélo.", season: "Saison 3", author: null, tags: ["machine", "technique"] },
-      { id: "S17", text: "Aimez-vous les uns les autres ! Ne vous battez plus ! Ne vous mordez plus ! Ça risque de vous esquinter les dents ! Le soir vous avez des dents, le lendemain, vous n'en avez plus !", season: "Saison 3", author: "Principe civilisatif Gibi", tags: ["gibi", "civilisation", "dentifrice"] },
-      { id: "S18", text: "Je pompe, donc je suis, et réciproquement, je suis, donc je pompe.", season: "Les Shadoks et le Big Blank", author: null, tags: ["pompologie", "philosophie", "descartes"] },
-      { id: "S19", text: "S'il n'y a pas de solution, c'est qu'il n'y a pas de problème.", season: "Les Shadoks et le Big Blank", author: "Le Marin Shadok", tags: ["solution", "problème", "absurde"] },
-      { id: "S20", text: "Tout ce qui va arriver peut et doit être prévu.", season: "Les Shadoks et le Big Blank", author: "Le Chef Shadok", tags: ["prévision", "management", "chef"] },
-      { id: "S21", text: "Tout ce qui est prévu doit obligatoirement arriver.", season: "Les Shadoks et le Big Blank", author: "Le Chef Shadok", tags: ["prévision", "destin", "chef"] },
-      { id: "S22", text: "Si ça fait mal, c'est que ça fait du bien.", season: "Les Shadoks et le Big Blank", author: null, tags: ["douleur", "bien", "devise"] },
-      { id: "S23", text: "On n'est jamais aussi bien battu que par soi-même.", season: "Les Shadoks et le Big Blank", author: null, tags: ["autodestruction", "excellence"] },
-      { id: "S24", text: "Les Shadoks pompaient, pompaient, pompaient…", season: "Générique", author: null, tags: ["pompe", "générique", "mantra"] }
+      {
+        id: "S01",
+        text: "Plus ça rate, plus on a de chance que ça marche.",
+        season: "Générique",
+        author: null,
+        tags: ["pompologie", "optimisme"]
+      },
+      {
+        id: "S02",
+        text: "Pourquoi faire simple quand on peut faire compliqué.",
+        season: "Générique",
+        author: null,
+        tags: ["complexité", "inefficacité"]
+      },
+      {
+        id: "S03",
+        text: "Un Shadok mort est un Shadok qui ne pompe pas.",
+        season: "Générique",
+        author: "Le Devin plombier",
+        tags: ["pompe", "existence"]
+      },
+      {
+        id: "S04",
+        text: "La ligne droite est le plus long chemin d'un point à un autre.",
+        season: "Générique",
+        author: null,
+        tags: ["logique", "absurde"]
+      },
+      {
+        id: "S05",
+        text: "Il faut pomper pour vivre, et donc vivre pour pomper.",
+        season: "Générique",
+        author: null,
+        tags: ["pompe", "existence", "tautologie"]
+      },
+      {
+        id: "S06",
+        text: "Principe en pompologie : Il vaut mieux pomper d'arrache-pied même s'il ne se passe rien que de risquer qu'il ne se passe quelque chose de pire en ne pompant pas.",
+        season: "Générique",
+        author: null,
+        tags: ["pompologie", "principe", "risque"]
+      },
+      {
+        id: "S07",
+        text: "Pour faire le moins de mécontents possibles, il faut toujours taper sur les mêmes.",
+        season: "Générique",
+        author: "Le Marin Shadok",
+        tags: ["politique", "management absurde"]
+      },
+      {
+        id: "S08",
+        text: "Dans la marine, on ne fait pas grand-chose, mais on le fait de bonne heure.",
+        season: "Saison 1",
+        author: "Le Marin Shadok",
+        tags: ["marine", "productivité"]
+      },
+      {
+        id: "S09",
+        text: "Ce n'est qu'en essayant continuellement que l'on finit par réussir.",
+        season: "Saison 1",
+        author: null,
+        tags: ["persévérance", "pompologie"]
+      },
+      {
+        id: "S10",
+        text: "Quand on ne sait pas où l'on va, il faut aller vite, et le plus vite possible.",
+        season: "Saison 2",
+        author: "Le Marin Shadok",
+        tags: ["navigation", "urgence", "absurde"]
+      },
+      {
+        id: "S11",
+        text: "Chacun sait que c'est sur rien du tout qu'on bâtit les empires les plus solides.",
+        season: "Saison 3",
+        author: null,
+        tags: ["empire", "fondations", "absurde"]
+      },
+      {
+        id: "S12",
+        text: "La culture c'est ce qu'il reste quand on a tout oublié.",
+        season: "Saison 3",
+        author: null,
+        tags: ["culture", "mémoire"]
+      },
+      {
+        id: "S13",
+        text: "Principe d'incertitude : s'il y a une chose où on était sûr, c'est que c'était faux.",
+        season: "Saison 3",
+        author: null,
+        tags: ["incertitude", "épistémologie"]
+      },
+      {
+        id: "S14",
+        text: "Pour guérir quelque chose qui ne marche pas ou qui fait trop de bruit, il faut et il suffit de taper dessus avec quelque chose qui marche mieux ou qui fait plus de bruit.",
+        season: "Saison 3",
+        author: "Le Grand Intelligentieur",
+        tags: ["réparation", "technique", "absurde"]
+      },
+      {
+        id: "S15",
+        text: "La plus grave maladie du cerveau, c'est de réfléchir.",
+        season: "Saison 3",
+        author: "Le Grand Intelligentieur",
+        tags: ["intelligence", "pensée", "paradoxe"]
+      },
+      {
+        id: "S16",
+        text: "La machine ce n'est pas un vélo.",
+        season: "Saison 3",
+        author: null,
+        tags: ["machine", "technique"]
+      },
+      {
+        id: "S17",
+        text: "Aimez-vous les uns les autres ! Ne vous battez plus ! Ne vous mordez plus ! Ça risque de vous esquinter les dents ! Le soir vous avez des dents, le lendemain, vous n'en avez plus !",
+        season: "Saison 3",
+        author: "Principe civilisatif Gibi",
+        tags: ["gibi", "civilisation", "dentifrice"]
+      },
+      {
+        id: "S18",
+        text: "Je pompe, donc je suis, et réciproquement, je suis, donc je pompe.",
+        season: "Les Shadoks et le Big Blank",
+        author: null,
+        tags: ["pompologie", "philosophie", "descartes"]
+      },
+      {
+        id: "S19",
+        text: "S'il n'y a pas de solution, c'est qu'il n'y a pas de problème.",
+        season: "Les Shadoks et le Big Blank",
+        author: "Le Marin Shadok",
+        tags: ["solution", "problème", "absurde"]
+      },
+      {
+        id: "S20",
+        text: "Tout ce qui va arriver peut et doit être prévu.",
+        season: "Les Shadoks et le Big Blank",
+        author: "Le Chef Shadok",
+        tags: ["prévision", "management", "chef"]
+      },
+      {
+        id: "S21",
+        text: "Tout ce qui est prévu doit obligatoirement arriver.",
+        season: "Les Shadoks et le Big Blank",
+        author: "Le Chef Shadok",
+        tags: ["prévision", "destin", "chef"]
+      },
+      {
+        id: "S22",
+        text: "Si ça fait mal, c'est que ça fait du bien.",
+        season: "Les Shadoks et le Big Blank",
+        author: null,
+        tags: ["douleur", "bien", "devise"]
+      },
+      {
+        id: "S23",
+        text: "On n'est jamais aussi bien battu que par soi-même.",
+        season: "Les Shadoks et le Big Blank",
+        author: null,
+        tags: ["autodestruction", "excellence"]
+      },
+      {
+        id: "S24",
+        text: "Les Shadoks pompaient, pompaient, pompaient…",
+        season: "Générique",
+        author: null,
+        tags: ["pompe", "générique", "mantra"]
+      }
     ];
 
     const usedIds = new Set();
-    let typeWriterInterval = null;
-    let isAnimating = false;
     let clickCount = 0;
 
-    const pomperBtn = document.getElementById('pomper-btn');
-    const container = document.getElementById('devise-text');
-    const attribution = document.getElementById('attribution');
-    const shareBtn = document.getElementById('share-btn');
-    const copyBtn = document.getElementById('copy-btn');
-    const shadok = document.getElementById('shadok-mascot');
-
-    // 1. Anti-répétition session
     function getRandomDevise() {
       if (usedIds.size >= DEVISES.length) {
         usedIds.clear(); // réinitialise quand toutes vues
@@ -372,21 +538,17 @@
       return devise;
     }
 
-    // 2. Animation typewriter
     function typeWriter(element, text, callback) {
-      if (typeWriterInterval) clearInterval(typeWriterInterval);
-      
       element.classList.add('typing');
       element.textContent = '';
       const words = text.split(' ');
       let i = 0;
-      
-      typeWriterInterval = setInterval(() => {
+      const interval = setInterval(() => {
         if (i < words.length) {
           element.textContent += (i === 0 ? '' : ' ') + words[i];
           i++;
         } else {
-          clearInterval(typeWriterInterval);
+          clearInterval(interval);
           element.classList.remove('typing');
           if (callback) callback();
         }
@@ -397,10 +559,9 @@
       return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    // 3. Transition entre devises
     async function showDevise(devise) {
-      isAnimating = true;
-      pomperBtn.disabled = true;
+      const container = document.getElementById('devise-text');
+      const attribution = document.getElementById('attribution');
 
       // Sortie de l'ancienne devise
       container.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
@@ -427,65 +588,9 @@
         if (devise.author) attrText += ` — ${devise.author}`;
         attribution.textContent = attrText;
         attribution.classList.add('visible');
-        
-        isAnimating = false;
-        pomperBtn.disabled = false;
       });
     }
 
-    // 4. Gestion du bouton pomper
-    pomperBtn.addEventListener('click', () => {
-      if (isAnimating) return;
-
-      // Animation pompe sur le bouton
-      pomperBtn.classList.add('pumping');
-      setTimeout(() => {
-        pomperBtn.classList.remove('pumping');
-      }, 700);
-
-      // Nouvelle devise
-      const devise = getRandomDevise();
-      showDevise(devise);
-
-      // Easter egg
-      clickCount++;
-      if (clickCount >= 10) triggerEasterEgg();
-    });
-
-    // 5. Partage
-    copyBtn.addEventListener('click', async () => {
-      const text = container.textContent;
-      try {
-        await navigator.clipboard.writeText(text + '\n— Les Shadoks');
-        copyBtn.textContent = '✓ Copié';
-        copyBtn.classList.add('copied');
-        setTimeout(() => {
-          copyBtn.textContent = 'Copier';
-          copyBtn.classList.remove('copied');
-        }, 2000);
-      } catch(e) {
-        console.error('Clipboard API non disponible');
-      }
-    });
-
-    if (navigator.share) {
-      shareBtn.addEventListener('click', async () => {
-        const text = container.textContent;
-        try {
-          await navigator.share({
-            title: 'Devise Shadok',
-            text: text + '\n— Les Shadoks',
-            url: window.location.href
-          });
-        } catch (error) {
-          console.log('Partage annulé ou échoué', error);
-        }
-      });
-    } else {
-      shareBtn.style.display = 'none';
-    }
-
-    // 6. Easter egg
     function triggerEasterEgg() {
       const overlay = document.createElement('div');
       overlay.style.cssText = `
@@ -497,24 +602,24 @@
         color: #F5C800; text-align: center; padding: 2rem;
       `;
       overlay.innerHTML = `
-        <pre style="font-size: clamp(0.5rem, 1.5vw, 0.85rem); line-height: 1.4; color: #F5C800;">
-    _____
-   /     \\
-  | o   o |
-  |   ▼   |
-   \\ ___ /
-   /|   |\\
-  / |   | \\
- (  | | |  )
-    | | |
-    |_| |_|
-        </pre>
-        <p style="font-size: 1.5rem; font-weight: 700; margin-top: 2rem; font-family: 'Space Grotesk', sans-serif;">
-          Les Shadoks pompaient, pompaient, pompaient…
-        </p>
-        <p style="font-size: 0.75rem; margin-top: 1rem; opacity: 0.5; letter-spacing: 0.15em;">
-          CLIQUEZ POUR CONTINUER À POMPER
-        </p>
+    <pre style="font-size: clamp(0.5rem, 1.5vw, 0.85rem); line-height: 1.4; color: #F5C800;">
+        _____
+       /     \\
+      | o   o |
+      |   ▼   |
+       \\ ___ /
+       /|   |\\
+      / |   | \\
+     (  | | |  )
+        | | |
+        |_| |_|
+    </pre>
+    <p style="font-size: 1.5rem; font-weight: 700; margin-top: 2rem; font-family: 'Space Grotesk', sans-serif;">
+      Les Shadoks pompaient, pompaient, pompaient…
+    </p>
+    <p style="font-size: 0.75rem; margin-top: 1rem; opacity: 0.5; letter-spacing: 0.15em;">
+      CLIQUEZ POUR CONTINUER À POMPER
+    </p>
       `;
       overlay.addEventListener('click', () => {
         document.body.removeChild(overlay);
@@ -523,7 +628,6 @@
       document.body.appendChild(overlay);
     }
 
-    // 7. Grain de bruit sur canvas
     function generateGrain() {
       const canvas = document.getElementById('grain-overlay');
       const ctx = canvas.getContext('2d');
@@ -550,49 +654,103 @@
       drawGrain();
     }
 
-    // 8. Navigation clavier
-    document.addEventListener('keydown', (e) => {
-      if ((e.code === 'Space' || e.code === 'Enter') && !isAnimating) {
-        // Empêche le comportement par défaut (scroll ou double déclenchement si focus sur le bouton)
-        if (document.activeElement !== pomperBtn) {
-          e.preventDefault();
-          pomperBtn.click();
-        }
-      }
-    });
-
-    // Mascotte cliquable
-    shadok.addEventListener('click', () => {
-      if (isAnimating) return;
-      shadok.classList.add('jumping');
-      shadok.addEventListener('animationend', () => {
-        shadok.classList.remove('jumping');
-        shadok.style.animation = 'none';
-        requestAnimationFrame(() => {
-          shadok.style.animation = '';
-        });
-      }, { once: true });
-      pomperBtn.click();
-    });
-
-    // 9. Initialisation
+    // Initialisation et Event Listeners
     document.addEventListener('DOMContentLoaded', () => {
       generateGrain();
-      const premiereDevise = getRandomDevise();
       
-      // Bloquer le bouton pendant le tout premier affichage
-      isAnimating = true;
-      pomperBtn.disabled = true;
+      const pomperBtn = document.getElementById('pomper-btn');
+      const shadok = document.getElementById('shadok-mascot');
 
+      // Premier affichage
+      const premiereDevise = getRandomDevise();
+      const container = document.getElementById('devise-text');
       typeWriter(container, `« ${premiereDevise.text} »`, () => {
+        const attribution = document.getElementById('attribution');
         let attrText = premiereDevise.season;
         if (premiereDevise.author) attrText += ` — ${premiereDevise.author}`;
         attribution.textContent = attrText;
         attribution.classList.add('visible');
-        
-        isAnimating = false;
-        pomperBtn.disabled = false;
       });
+
+      // Clic bouton Pomper
+      pomperBtn.addEventListener('click', () => {
+        // Animation pompe sur le bouton
+        pomperBtn.classList.add('pumping');
+        pomperBtn.disabled = true;
+        setTimeout(() => {
+          pomperBtn.classList.remove('pumping');
+          pomperBtn.disabled = false;
+        }, 700);
+
+        // Nouvelle devise
+        const devise = getRandomDevise();
+        showDevise(devise);
+
+        // Easter egg
+        clickCount++;
+        if (clickCount === 10) triggerEasterEgg();
+      });
+
+      // Clic Shadok
+      shadok.addEventListener('click', () => {
+        shadok.classList.add('jumping');
+        shadok.addEventListener('animationend', () => {
+          shadok.classList.remove('jumping');
+          // Remettre l'animation float
+          shadok.style.animation = 'none';
+          requestAnimationFrame(() => {
+            shadok.style.animation = '';
+          });
+        }, { once: true });
+        pomperBtn.click(); // Pomper aussi !
+      });
+
+      // Navigation clavier
+      document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' || e.code === 'Enter') {
+          e.preventDefault();
+          if (!pomperBtn.disabled) {
+            pomperBtn.click();
+          }
+        }
+      });
+
+      // Copie dans le presse-papier
+      document.getElementById('copy-btn').addEventListener('click', async () => {
+        const text = document.getElementById('devise-text').textContent;
+        const btn = document.getElementById('copy-btn');
+        try {
+          await navigator.clipboard.writeText(text + '\n— Les Shadoks');
+          btn.textContent = '✓ Copié';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'Copier';
+            btn.classList.remove('copied');
+          }, 2000);
+        } catch(e) {
+          console.error('Clipboard API non disponible');
+        }
+      });
+
+      // Web Share API (mobile)
+      const shareBtn = document.getElementById('share-btn');
+      if (navigator.share) {
+        shareBtn.addEventListener('click', async () => {
+          const text = document.getElementById('devise-text').textContent;
+          try {
+            await navigator.share({
+              title: 'Devise Shadok',
+              text: text + '\n— Les Shadoks',
+              url: window.location.href
+            });
+          } catch (err) {
+            console.log('Partage annulé');
+          }
+        });
+      } else {
+        // Fallback : masque le bouton si API indisponible
+        shareBtn.style.display = 'none';
+      }
     });
   </script>
 </body>
